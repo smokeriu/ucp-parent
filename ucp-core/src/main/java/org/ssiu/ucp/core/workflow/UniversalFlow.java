@@ -72,7 +72,7 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
         // init plugin manager
         pluginManager.init();
         pluginManager.addCustomPlugins(elementList);
-        pluginManager.prepare(env);
+        pluginManager.preparePlugins(env);
     }
 
     private Map<String, Element> initElementMap() {
@@ -205,6 +205,6 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
 
     @Override
     public void releaseFlow() {
-        pluginManager.release(env);
+        pluginManager.releasePlugins(env);
     }
 }
