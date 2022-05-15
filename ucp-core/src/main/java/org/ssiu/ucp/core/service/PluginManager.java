@@ -196,25 +196,16 @@ public class PluginManager<E extends RuntimeEnv> {
     /**
      * Do prepare
      */
-    public void prepare(E env) {
-        preparePlugins(env);
-    }
-
-    /**
-     * Do release
-     */
-    public void release(E env) {
-        releasePlugins(env);
-    }
-
-
-    private void preparePlugins(E env) {
+    public void preparePlugins(E env) {
         LOG.info("start prepare all plugins");
         allPlugins.values().forEach(plugin -> preparePlugin(plugin, env));
         LOG.info("end prepare all plugins");
     }
 
-    private void releasePlugins(E env) {
+    /**
+     * Do release
+     */
+    public void releasePlugins(E env) {
         LOG.info("start release all plugins");
         allPlugins.values().forEach(plugin -> releasePlugin(plugin, env));
         LOG.info("end release all plugins");
@@ -239,7 +230,11 @@ public class PluginManager<E extends RuntimeEnv> {
     }
 
     public Plugin<E> getPlugin(Element dto) {
-        final String lowerPluginName = findDtoClassName(dto);
-        return allPlugins.get(lowerPluginName);
+        final String pluginName = findDtoClassName(dto);
+        return getPluginByName(pluginName);
+    }
+
+    public Plugin<E> getPluginByName(String name) {
+        return allPlugins.get(name);
     }
 }
