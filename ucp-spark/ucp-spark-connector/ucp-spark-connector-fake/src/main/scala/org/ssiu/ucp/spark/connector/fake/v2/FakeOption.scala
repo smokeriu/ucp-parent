@@ -11,8 +11,8 @@ object FakeOption {
   private final val STR_MAX_LEN_DEFAULT = 20
 
   // batch
-  final val RECORD_PER_BATCH = "maxRecord"
-  final val RECORD_PER_BATCH_DEFAULT = 10000
+  final val RECORD_PER = "maxRecord"
+  final val RECORD_PER_DEFAULT = 10000
 
   // stream
 
@@ -21,9 +21,9 @@ object FakeOption {
   def apply(option: CaseInsensitiveStringMap): FakeOption = {
     val intMax = option.getInt(INT_MAX, INT_MAX_DEFAULT)
     val strMaxLen = option.getInt(STR_MAX_LEN, STR_MAX_LEN_DEFAULT)
-    val maxRecord = option.getLong(RECORD_PER_BATCH, RECORD_PER_BATCH_DEFAULT)
+    val maxRecord = option.getLong(RECORD_PER, RECORD_PER_DEFAULT)
     FakeOption(intMax, strMaxLen, maxRecord)
   }
 }
 
-case class FakeOption private(intMax: Int, strMaxLen: Int, maxRecord: Long)
+case class FakeOption private(intMax: Int, strMaxLen: Int, recordPer: Long)

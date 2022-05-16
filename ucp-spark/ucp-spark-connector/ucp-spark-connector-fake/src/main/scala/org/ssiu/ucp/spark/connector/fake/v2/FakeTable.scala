@@ -20,11 +20,9 @@ class FakeTable(userSchema: StructType) extends SupportsRead {
 
   /**
    * Support BATCH_READ & MICRO_BATCH_READnow
-   *
-   * TODO: Continuous StreamRead coming soon
    */
   override def capabilities(): util.Set[TableCapability] = {
-    (TableCapability.BATCH_READ :: TableCapability.MICRO_BATCH_READ :: Nil).toSet.asJava
+    (TableCapability.BATCH_READ :: TableCapability.MICRO_BATCH_READ :: TableCapability.CONTINUOUS_READ :: Nil).toSet.asJava
   }
 
   override def newScanBuilder(caseInsensitiveStringMap: CaseInsensitiveStringMap): ScanBuilder = {
