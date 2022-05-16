@@ -36,7 +36,7 @@ class FakeBatchTest {
     val maxRecord = Random.nextInt(20000)
     val in = spark.read
       .schema(schema)
-      .option(FakeOption.RECORD_PER, maxRecord)
+      .option(FakeOption.SPEED, maxRecord)
       .format(fakeConnectorName)
       .load()
     Assertions.assertEquals(maxRecord, in.count())
@@ -49,7 +49,7 @@ class FakeBatchTest {
     val intMax = Random.nextInt(20000)
     val in = spark.read
       .schema(schema)
-      .option(FakeOption.INT_MAX, intMax)
+      .option(FakeOption.NUMBER_MAX, intMax)
       .format(fakeConnectorName)
       .load()
     val maxInFake = in.agg(max(col(columName))).head().getInt(0)
