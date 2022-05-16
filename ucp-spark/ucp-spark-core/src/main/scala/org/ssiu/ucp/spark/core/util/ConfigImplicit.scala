@@ -14,6 +14,8 @@ object ConfigImplicit {
 
     def optionalString(path: String): Option[String] = getOptional(path, config.getString)
 
+    def optionalLong(path: String): Option[Long] = getOptional(path, config.getLong)
+
     def optionalInt(path: String): Option[Int] = getOptional(path, config.getInt)
 
     def optionalDouble(path: String): Option[Double] = getOptional(path, config.getDouble)

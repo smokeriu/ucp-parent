@@ -1,3 +1,7 @@
 /.idea/
 /app/
 /release/
+/spark/
+/lib/
+/ucp-client/spark
+/ucp-client/lib

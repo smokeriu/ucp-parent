@@ -4,24 +4,24 @@ import org.apache.spark.sql.util.CaseInsensitiveStringMap
 
 object FakeOption {
   // common
-  final val INT_MAX = "intMax"
-  private final val INT_MAX_DEFAULT = 1000
+  final val NUMBER_MAX = "numberMax"
+  final val NUMBER_MAX_DEFAULT = 1000
 
   final val STR_MAX_LEN = "strMaxLen"
-  private final val STR_MAX_LEN_DEFAULT = 20
+  final val STR_MAX_LEN_DEFAULT = 20
 
   // batch
-  final val RECORD_PER = "maxRecord"
-  final val RECORD_PER_DEFAULT = 10000
+  final val SPEED = "maxRecord"
+  final val SPEED_DEFAULT = 10000
 
   // stream
 
 
   // apply
   def apply(option: CaseInsensitiveStringMap): FakeOption = {
-    val intMax = option.getInt(INT_MAX, INT_MAX_DEFAULT)
+    val intMax = option.getInt(NUMBER_MAX, NUMBER_MAX_DEFAULT)
     val strMaxLen = option.getInt(STR_MAX_LEN, STR_MAX_LEN_DEFAULT)
-    val maxRecord = option.getLong(RECORD_PER, RECORD_PER_DEFAULT)
+    val maxRecord = option.getLong(SPEED, SPEED_DEFAULT)
     FakeOption(intMax, strMaxLen, maxRecord)
   }
 }
