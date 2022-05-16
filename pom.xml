@@ -8,7 +8,7 @@
     <artifactId>ucp-parent</artifactId>
     <packaging>pom</packaging>
     <version>0.1</version>
-    <name>${artifactId}</name>
+    <name>${project.artifactId}</name>
     <url>https://github.com/smokeriu/ucp-parent</url>
     <modules>
         <module>ucp-core</module>
@@ -50,22 +50,22 @@
             <dependency>
                 <groupId>org.ssiu.ucp</groupId>
                 <artifactId>ucp-common</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ssiu.ucp</groupId>
                 <artifactId>ucp-core</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ssiu.ucp</groupId>
                 <artifactId>ucp-util</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ssiu.ucp</groupId>
                 <artifactId>ucp-spark-core</artifactId>
-                <version>${version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- utils -->
@@ -167,6 +167,16 @@
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
                     <version>4.6.1</version>
+                    <executions>
+                        <execution>
+                            <id>scala-compile-first</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <!-- code check -->
                 <plugin>
