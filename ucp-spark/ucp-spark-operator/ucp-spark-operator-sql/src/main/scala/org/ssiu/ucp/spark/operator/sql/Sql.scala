@@ -1,12 +1,12 @@
 package org.ssiu.ucp.spark.operator.sql
 
+import java.util
+
 import com.typesafe.config.Config
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.DataFrame
 import org.ssiu.ucp.core.util.CheckResult
 import org.ssiu.ucp.spark.core.api.{SparkBatchOperator, SparkStreamOperator}
 import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
-
-import java.util
 
 class Sql extends SparkBatchOperator with SparkStreamOperator {
 

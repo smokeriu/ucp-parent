@@ -13,6 +13,6 @@
         <module>ucp-spark-operator-sql</module>
     </modules>
     <artifactId>ucp-spark-operator</artifactId>
-    <name>${artifactId}</name>
+    <name>${project.artifactId}</name>
 
 </project>
