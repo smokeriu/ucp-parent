@@ -1,5 +1,6 @@
 package org.ssiu.ucp.spark.connector.fake.v2
 
+import org.apache.spark.sql.connector.read.streaming.MicroBatchStream
 import org.apache.spark.sql.connector.read.{Batch, Scan, ScanBuilder}
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.util.CaseInsensitiveStringMap
@@ -26,6 +27,10 @@ class FakeTableScan(schema: StructType, option: CaseInsensitiveStringMap)
 
   override def toBatch: Batch = {
     new FakeBatch(schema, FakeOption(option))
+  }
+
+  override def toMicroBatchStream(checkpointLocation: String): MicroBatchStream = {
+    new FakeMicroBatchStream(schema, FakeOption(option))
   }
 }
 
