@@ -13,7 +13,6 @@ public class App {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) throws Exception {
-        assert args.length == 1;
         final UcpClient ucpClient = createClient(args);
         ucpClient.start();
     }
