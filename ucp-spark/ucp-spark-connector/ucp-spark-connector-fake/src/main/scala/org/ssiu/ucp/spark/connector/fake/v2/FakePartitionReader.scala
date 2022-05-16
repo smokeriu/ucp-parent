@@ -31,18 +31,20 @@ class FakePartitionReaderFactory(schema: StructType, fakeOption: FakeOption) ext
 /**
  * We provide a single thread/partition fake reader now.
  *
- * Generate only [[FakeOption.maxRecord]] data items
+ * Generate only [[FakeOption.recordPer]] data items
  *
  * @param schema Fake data schema
  */
 class FakePartitionReader(schema: StructType, fakeOption: FakeOption)
   extends PartitionReader[InternalRow] {
 
+  import FakePartitionReader._
+
   // Thread safety?
   private var current = 0
 
   override def next(): Boolean = {
-    if (current < fakeOption.maxRecord) {
+    if (current < fakeOption.recordPer) {
       current += 1
       true
     } else {
@@ -51,20 +53,22 @@ class FakePartitionReader(schema: StructType, fakeOption: FakeOption)
   }
 
   override def get(): InternalRow = {
-    InternalRow.fromSeq(schemaToSeq())
+    InternalRow.fromSeq(schemaToSeq(schema, fakeOption))
   }
 
   override def close(): Unit = {
     // nothing to do now
   }
+}
 
+object FakePartitionReader {
   /**
    * Convert StructType to a line of randomly generated data
    *
    * @return Seq[Any]
    */
-  private def schemaToSeq() = {
-    schema.map(_.dataType).map(typeToValue)
+  private[v2] def schemaToSeq(schema: StructType, fakeOption: FakeOption) = {
+    schema.map(_.dataType).map(t => typeToValue(t, fakeOption))
   }
 
   /**
@@ -72,10 +76,10 @@ class FakePartitionReader(schema: StructType, fakeOption: FakeOption)
    *
    * @note we must use [[UTF8String]] when generate a string
    */
-  private def typeToValue(dataType: DataType): Any = {
+  private[v2] def typeToValue(dataType: DataType, fakeOption: FakeOption): Any = {
     dataType match {
       case IntegerType => Random.nextInt(fakeOption.intMax)
-      case _ => UTF8String.fromString(Random.alphanumeric.take(Random.nextInt(fakeOption.strMaxLen)).mkString)
+      case _ => UTF8String.fromString(Random.alphanumeric.take(1 + Random.nextInt(fakeOption.strMaxLen)).mkString)
     }
   }
 }
