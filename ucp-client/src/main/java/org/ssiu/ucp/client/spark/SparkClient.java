@@ -3,14 +3,12 @@ package org.ssiu.ucp.client.spark;
 import com.beust.jcommander.JCommander;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.ssiu.ucp.client.api.UcpClient;
+import org.ssiu.ucp.client.util.PathFinder;
 import org.ssiu.ucp.common.config.ClientConfig;
 import org.ssiu.ucp.common.mode.EngineType;
 import org.ssiu.ucp.common.service.AppConfig;
-import org.ssiu.ucp.spark.core.command.SparkAppArgs;
-import org.ssiu.ucp.spark.core.command.SparkOptions;
-import org.ssiu.ucp.spark.core.command.SparkSubmitCommand;
-import org.ssiu.ucp.client.api.UcpClient;
-import org.ssiu.ucp.client.util.PathFinder;
+import org.ssiu.ucp.core.command.BaseAppArgs;
 import org.ssiu.ucp.util.base.ProcessRunner;
 import org.ssiu.ucp.util.command.CommandFactory;
 
@@ -22,20 +20,20 @@ import java.util.stream.Collectors;
 
 public class SparkClient implements UcpClient {
 
-    private static Logger LOG = LoggerFactory.getLogger(SparkClient.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SparkClient.class);
 
-    private final SparkAppArgs sparkAppArgs;
+    private final BaseAppArgs sparkAppArgs;
 
     private String[] oriArgs;
 
     private AppConfig appConfig;
 
-    private SparkClient(SparkAppArgs sparkAppArgs) {
+    private SparkClient(BaseAppArgs sparkAppArgs) {
         this.sparkAppArgs = sparkAppArgs;
     }
 
     public static SparkClient from(String[] args) {
-        final SparkAppArgs appArgs = new SparkAppArgs();
+        final BaseAppArgs appArgs = new BaseAppArgs();
         JCommander.newBuilder()
                 .args(args)
                 .addObject(appArgs)
@@ -46,10 +44,8 @@ public class SparkClient implements UcpClient {
         return sparkClient;
     }
 
-    @Override
     public void initClient() {
         this.appConfig = AppConfig.fromPath(sparkAppArgs.getConfigFile());
-
     }
 
     private String buildCommand() throws Exception {
