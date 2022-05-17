@@ -76,12 +76,14 @@ case class CodeInvokeExpress(code: String,
 object CodeInvokeExpress extends Logging {
   /**
    * Now. only allow java method.
+   *
+   * @note There is some import requirement, so we put the code before the generate method
    */
   private def generateCode(code: String, methodName: String, inputTypes: Seq[DataType]) = {
-    s"""public Object generate(Object[] references) {
+    s"""$code
+       |public Object generate(Object[] references) {
        |  return $methodName(${ObjectToType(inputTypes)});
        |}
-       |$code
        |""".stripMargin
   }
 

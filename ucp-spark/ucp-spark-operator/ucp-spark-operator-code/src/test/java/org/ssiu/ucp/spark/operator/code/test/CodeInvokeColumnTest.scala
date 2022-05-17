@@ -37,7 +37,7 @@ class CodeInvokeColumnTest {
       .getLong(0) // sum make int to long
 
     println(out)
-    Assertions.assertEquals(out, 14)
+    Assertions.assertEquals(14, out)
   }
 
   @Test
@@ -71,7 +71,7 @@ class CodeInvokeColumnTest {
     val methodName = "add"
     val returnType = "String"
     val code =
-      s"""
+      s"""import java.util.Map;
          |public $returnType $methodName(int id, int id2){
          |   return String.valueOf(id + id2);
          |}
@@ -83,6 +83,28 @@ class CodeInvokeColumnTest {
       .getString(0)
 
     println(out)
-    Assertions.assertEquals(out, "2")
+    Assertions.assertEquals("2", out)
+  }
+
+  @Test
+  def EmptyArgTest(): Unit = {
+    val env = spark
+    import env.implicits._
+    val input = spark.sparkContext.parallelize((1, 1) :: Nil).toDF("id", "id2")
+    val methodName = "add"
+    val returnType = "String"
+    val code =
+      s"""public $returnType $methodName(){
+         |   return "hello world";
+         |}
+         |""".stripMargin
+
+    val out = input.withColumn("hello", CodeInvokeColumn.codeInvoke(code, methodName, returnType))
+      .select("hello")
+      .head()
+      .getString(0)
+
+    println(out)
+    Assertions.assertEquals("hello world", out)
   }
 }

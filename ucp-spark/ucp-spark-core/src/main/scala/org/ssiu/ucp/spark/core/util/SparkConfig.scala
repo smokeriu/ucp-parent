@@ -16,4 +16,6 @@ object SparkConfig {
   final val SPARK_MASTER = "spark.master"
   final val SPARK_MASTER_LOCAL = "local[4]"
 
+  final val SPARK_SUBMIT_DEPLOY_MODE = "spark.submit.deployMode"
+
 }
