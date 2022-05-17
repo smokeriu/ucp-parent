@@ -4,9 +4,7 @@ import org.ssiu.ucp.core.api.Plugin;
 import org.ssiu.ucp.core.env.RuntimeEnv;
 import org.ssiu.ucp.util.base.ClassBuilder;
 
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,8 +36,12 @@ public class PluginFactory {
     @SuppressWarnings("unchecked")
     private static <E extends RuntimeEnv> List<Plugin<E>> buildPluginList() {
         final ServiceLoader<Plugin<?>> load = ServiceLoader.load(PluginFactory.pluginClass);
-        return load.stream()
-                .map(provider -> (Plugin<E>) provider.get())
-                .collect(Collectors.toList());
+        final Iterator<Plugin<?>> iterator = load.iterator();
+        final List<Plugin<E>> list = new ArrayList<>();
+        while (iterator.hasNext()) {
+            final Plugin<E> plugin = (Plugin<E>) iterator.next();
+            list.add(plugin);
+        }
+        return list;
     }
 }

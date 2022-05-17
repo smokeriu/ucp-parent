@@ -95,7 +95,8 @@ object Code {
       case "cluster" => Paths.get(FileUtils.getFileName(codeFilePath)).getFileName
       case _ => throw new IllegalArgumentException("Unsupported deploy mode: " + deployMode)
     }
-    Files.readString(path)
+    // java 8 version
+    Files.readAllLines(path).asScala.mkString
   }
 
   private def buildConvertExpression(input: DataFrame, config: Config) = {
