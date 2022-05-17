@@ -7,6 +7,8 @@ import org.ssiu.ucp.common.api.Element;
 import org.ssiu.ucp.common.config.ClientConfig;
 import org.ssiu.ucp.common.config.JobConfig;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +53,7 @@ public class AppConfig {
     }
 
     public static AppConfig fromName(String fileName) {
-        LOG.info("Load config from File: {}", fileName);
+        LOG.info("Load config from Name: {}", fileName);
         final Config fileConfig = ConfigFactory.load(fileName)
                 .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
                 .resolveWith(ConfigFactory.systemProperties(),

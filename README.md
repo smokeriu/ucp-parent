@@ -10,15 +10,11 @@ Element is used to record the properties of each node in the fictitious graph, a
 # version require
 
 - Spark: 3.1.x
-- Flink: Coming soon.
+- Flink: Coming 0.3.
 - Java: 11+
 - Scala: 2.12.x
 
 # Usage 
-Coming soon
 
-# TODO:
-- 0.2
-  - Provide the fake connector for spark.
-  - Provide the SQL/Java Code operator for spark.
-  - Perfecting the test
+
+

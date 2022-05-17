@@ -1,6 +1,8 @@
 package org.ssiu.ucp.client.spark;
 
 import com.beust.jcommander.JCommander;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.ssiu.ucp.common.config.ClientConfig;
 import org.ssiu.ucp.common.mode.EngineType;
 import org.ssiu.ucp.common.service.AppConfig;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SparkClient implements UcpClient {
+
+    private static Logger LOG = LoggerFactory.getLogger(SparkClient.class);
 
     private final SparkAppArgs sparkAppArgs;
 
@@ -75,7 +79,7 @@ public class SparkClient implements UcpClient {
     }
 
 
-    private void addConfigFile(SparkOptions command, String configPath){
+    private void addConfigFile(SparkOptions command, String configPath) {
         final List<String> files = command.getFiles();
         files.add(configPath);
     }
@@ -87,7 +91,7 @@ public class SparkClient implements UcpClient {
     @Override
     public int start() throws Exception {
         final String command = buildCommand();
-
+        LOG.info("spark start command:\n{}", command);
         return ProcessRunner.runLocal(command);
     }
 }

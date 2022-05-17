@@ -20,8 +20,8 @@ case class SparkAppConfigHolder private(appArgs: SparkAppArgs) {
         AppConfig.fromPath(path)
       case "cluster" =>
         // use fileName
-        val fileName = Paths.get(FileUtils.getFileName(appArgs.getConfigFile)).getFileName.toString
-        AppConfig.fromName(fileName)
+        val filePath = Paths.get(FileUtils.getFileName(appArgs.getConfigFile)).getFileName.toString
+        AppConfig.fromPath(filePath)
       case _ =>
         LOG.error(s"This deploy mode [${appArgs.getDeployMode}] is not supported for the time being, and is temporarily supported by: [client, local, cluster]")
         throw new IllegalArgumentException("For Spark, the unknown deploy mode")
