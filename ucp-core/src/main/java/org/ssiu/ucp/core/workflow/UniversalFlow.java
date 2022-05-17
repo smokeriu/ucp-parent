@@ -108,7 +108,7 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
         final Map<String, T> parentCache = new HashMap<>(parentNames.size());
         for (String parentName : parentNames) {
             final Optional<T> table = tableProvider.getTable(parentName);
-            if (table.isEmpty()) {
+            if (!table.isPresent()) {
                 final T t = runElement(elementDTOMap.get(parentName));
                 tableProvider.addTable(parentName, t);
                 parentCache.put(parentName, t);
