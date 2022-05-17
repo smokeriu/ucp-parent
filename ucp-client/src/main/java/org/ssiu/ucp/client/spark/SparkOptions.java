@@ -1,4 +1,4 @@
-package org.ssiu.ucp.spark.core.command;
+package org.ssiu.ucp.client.spark;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigBeanFactory;
@@ -55,7 +55,7 @@ public class SparkOptions implements Serializable {
     @Optional
     private List<String> jars = new ArrayList<>();
 
-    @Parameter(value = "--files", description = "ext jars")
+    @Parameter(value = "--files", description = "ext files")
     @Optional
     private List<String> files = new ArrayList<>();
 

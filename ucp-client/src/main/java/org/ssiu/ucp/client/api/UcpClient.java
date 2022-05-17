@@ -6,11 +6,6 @@ package org.ssiu.ucp.client.api;
 public interface UcpClient {
 
     /**
-     * init client env
-     */
-    void initClient();
-
-    /**
      * start the client.
      *
      * @return exit code

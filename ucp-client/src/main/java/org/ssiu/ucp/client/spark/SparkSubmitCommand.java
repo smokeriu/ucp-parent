@@ -1,11 +1,7 @@
-package org.ssiu.ucp.spark.core.command;
+package org.ssiu.ucp.client.spark;
 
-import com.typesafe.config.Optional;
 import org.ssiu.ucp.core.command.CommandArgs;
 import org.ssiu.ucp.util.command.CommandFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * use to build a spark submit command.
