@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>ucp-spark-operator-sql</module>
+        <module>ucp-spark-operator-code</module>
     </modules>
     <artifactId>ucp-spark-operator</artifactId>
     <name>${project.artifactId}</name>
