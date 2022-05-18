@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ucp-parent</artifactId>
+        <groupId>org.ssiu.ucp</groupId>
+        <version>0.2.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ucp-client</artifactId>
+    <name>${project.artifactId}</name>
+
+    <dependencies>
+        <!-- ucp -->
+        <dependency>
+            <groupId>org.ssiu.ucp</groupId>
+            <artifactId>ucp-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ssiu.ucp</groupId>
+            <artifactId>ucp-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ssiu.ucp</groupId>
+            <artifactId>ucp-util</artifactId>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <finalName>ucp-client</finalName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <!-- remove version -->
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.ssiu.ucp</groupId>
+                                    <artifactId>ucp-core</artifactId>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                    <destFileName>ucp-core.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.ssiu.ucp</groupId>
+                                    <artifactId>ucp-common</artifactId>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                    <destFileName>ucp-common.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.ssiu.ucp</groupId>
+                                    <artifactId>ucp-util</artifactId>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                    <destFileName>ucp-util.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <!-- copy lib to lib dir -->
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <!-- have copied prepare-package -->
+                            <excludeGroupIds>org.ssiu.ucp</excludeGroupIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

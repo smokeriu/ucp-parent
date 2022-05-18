@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.ssiu.ucp.common.mode.EngineType;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
@@ -50,8 +51,8 @@ public class PathFinder {
         }
     }
 
-    public static Collection<Path> findUcpLib() throws IOException {
-        final Path libPath = appRoot().resolve(UCP_LIB_PATH);
+    public static Collection<Path> findUcpLib(EngineType engineType) throws IOException {
+        final Path libPath = appRoot().resolve(engineType.getSimpleName() + File.separatorChar + UCP_LIB_PATH);
         return findJars(libPath);
     }
 

@@ -1,0 +1,160 @@
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>bin</id>
+    <formats>
+        <format>tar.gz</format>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>../</directory>
+
+            <excludes>
+                <exclude>**/target/**</exclude>
+                <exclude>**/.classpath</exclude>
+                <exclude>**/.project</exclude>
+                <exclude>**/.settings/**</exclude>
+                <exclude>lib/**</exclude>
+            </excludes>
+
+            <includes>
+                <include>README.md</include>
+                <include>bin/**</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <!-- client -->
+        <fileSet>
+            <directory>../ucp-client/target</directory>
+            <includes>
+                <include>ucp-client*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/lib</outputDirectory>
+        </fileSet>
+        <!-- client lib -->
+        <fileSet>
+            <directory>../ucp-client/target/lib</directory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/lib</outputDirectory>
+        </fileSet>
+
+        <!-- spark -->
+        <fileSet>
+            <directory>../ucp-spark/ucp-spark-core/target</directory>
+            <includes>
+                <include>ucp-spark-core*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/spark</outputDirectory>
+        </fileSet>
+        <!-- spark lib -->
+        <fileSet>
+            <directory>../ucp-spark/ucp-spark-core/target/lib</directory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/spark/lib</outputDirectory>
+        </fileSet>
+        <!-- spark example -->
+        <fileSet>
+            <directory>../ucp-spark/example</directory>
+            <includes>
+                <include>*</include>
+            </includes>
+            <outputDirectory>/spark/example</outputDirectory>
+        </fileSet>
+
+        <!-- spark connectors -->
+        <fileSet>
+            <directory>../ucp-spark/ucp-spark-connector/ucp-spark-connector-fake/target</directory>
+            <includes>
+                <include>ucp-spark-connector-fake*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/spark/connector</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../ucp-spark/ucp-spark-connector/ucp-spark-connector-jdbc/target</directory>
+            <includes>
+                <include>ucp-spark-connector-jdbc*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/spark/connector</outputDirectory>
+        </fileSet>
+
+        <!-- spark operators -->
+        <fileSet>
+            <directory>../ucp-spark/ucp-spark-operator/ucp-spark-operator-sql/target</directory>
+            <includes>
+                <include>ucp-spark-operator-sql*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/spark/operator</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>../ucp-spark/ucp-spark-operator/ucp-spark-operator-code/target</directory>
+            <includes>
+                <include>ucp-spark-operator-code*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/spark/operator</outputDirectory>
+        </fileSet>
+
+
+        <!--Licenses And NOTICE-->
+        <fileSet>
+            <directory>release-docs</directory>
+            <outputDirectory>.</outputDirectory>
+        </fileSet>
+        <!-- DISCLAIMER -->
+        <fileSet>
+            <directory>${basedir}/.././</directory>
+            <includes>
+                <include>DISCLAIMER</include>
+            </includes>
+            <outputDirectory>.</outputDirectory>
+        </fileSet>
+        
+    </fileSets>
+</assembly>

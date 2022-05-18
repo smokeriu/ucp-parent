@@ -13,7 +13,6 @@ import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
 import org.ssiu.ucp.spark.core.util.SparkConfig
 import org.ssiu.ucp.spark.operator.code.Code.readCodeFromFile
 import org.ssiu.ucp.util.base.FileUtils
-import org.ssiu.ucp.spark.core.util.ConfigImplicit._
 
 import scala.collection.JavaConverters._
 

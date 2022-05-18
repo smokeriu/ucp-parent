@@ -1,0 +1,76 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>bin</id>
+    <formats>
+        <format>tar.gz</format>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <!-- core -->
+    <fileSet>
+        <directory>../ucp-core/target</directory>
+        <includes>
+            <include>ucp-core*.jar</include>
+        </includes>
+        <excludes>
+            <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+        </excludes>
+        <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+    <!-- core lib -->
+    <fileSet>
+        <directory>../ucp-core/target/lib</directory>
+        <includes>
+            <include>*.jar</include>
+        </includes>
+        <excludes>
+            <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+        </excludes>
+        <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+    <!-- common -->
+    <fileSet>
+        <directory>../ucp-common/target</directory>
+        <includes>
+            <include>ucp-common*.jar</include>
+        </includes>
+        <excludes>
+            <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+        </excludes>
+        <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+    <!-- common lib -->
+    <fileSet>
+        <directory>../ucp-common/target/lib</directory>
+        <includes>
+            <include>*.jar</include>
+        </includes>
+        <excludes>
+            <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+        </excludes>
+        <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+    <!-- util -->
+    <fileSet>
+        <directory>../ucp-util/target</directory>
+        <includes>
+            <include>ucp-util*.jar</include>
+        </includes>
+        <excludes>
+            <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+        </excludes>
+        <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+    <!-- util lib -->
+    <fileSet>
+        <directory>../ucp-util/target/lib</directory>
+        <includes>
+            <include>*.jar</include>
+        </includes>
+        <excludes>
+            <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+        </excludes>
+        <outputDirectory>/lib</outputDirectory>
+    </fileSet>
+</assembly>

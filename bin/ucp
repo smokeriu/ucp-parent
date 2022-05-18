@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+APP_DIR=$(cd $(dirname ${0})/../;pwd)
+APP_JAR=${APP_DIR}/lib/*
+
+if [ $# == 0 ]
+then
+    args="--help"
+else
+    args=$@
+fi
+
+java -cp $APP_JAR:. org.ssiu.ucp.client.App ${args}

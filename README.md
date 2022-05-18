@@ -11,10 +11,19 @@ Element is used to record the properties of each node in the fictitious graph, a
 
 - Spark: 3.1.x
 - Flink: Coming 0.3.
-- Java: 11+
+- Java: 8+
 - Scala: 2.12.x
 
-# Usage 
+# Quick start
 
+Preparation
+> export SPARK_HOME 
+> 
+> export HADOOP_CONF_DIR
+
+```shell
+cd $UCP_HOME
+bin/ucp-example
+```
 
 

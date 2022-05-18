@@ -1,0 +1,5 @@
+#!/bin/bash
+
+APP_DIR=$(cd $(dirname ${0})/../;pwd)
+
+sh $APP_DIR/bin/ucp -C ./spark/example/example.conf -E Spark -D local

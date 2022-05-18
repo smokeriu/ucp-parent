@@ -64,7 +64,7 @@ public class SparkClient implements UcpClient {
     private void addJars(SparkOptions command) throws IOException {
         final List<String> jars = command.getJars();
         final Collection<Path> libJars = PathFinder.findPlugin(EngineType.Spark);
-        final Collection<Path> ucpLib = PathFinder.findUcpLib();
+        final Collection<Path> ucpLib = PathFinder.findUcpLib(EngineType.Spark);
         jars.addAll(libJars.stream().map(Path::toString).collect(Collectors.toList()));
         jars.addAll(ucpLib.stream().map(Path::toString).collect(Collectors.toList()));
     }

@@ -61,8 +61,17 @@ public class AppConfig {
         return new AppConfig(fileConfig);
     }
 
+    public static AppConfig fromFile(File file){
+        LOG.info("Load config from File: {}", file.getName());
+        final Config fileConfig = ConfigFactory.parseFile(file)
+                .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
+                .resolveWith(ConfigFactory.systemProperties(),
+                        ConfigResolveOptions.defaults().setAllowUnresolved(true));
+        return new AppConfig(fileConfig);
+    }
+
     public static AppConfig fromPath(String filePath) {
-        LOG.info("Load config from File: {}", filePath);
+        LOG.info("Load config from Path: {}", filePath);
         final Config fileConfig = ConfigFactory.parseFile(Paths.get(filePath).toFile())
                 .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
                 .resolveWith(ConfigFactory.systemProperties(),

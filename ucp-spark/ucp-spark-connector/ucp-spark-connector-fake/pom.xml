@@ -44,6 +44,12 @@
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <finalName>ucp-spark-connector-fake</finalName>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
