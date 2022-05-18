@@ -28,7 +28,7 @@ public class App {
         switch (engine) {
             case Spark:
                 LOG.info("Build spark client");
-                return SparkClient.from(args);
+                return SparkClient.from(baseAppArgs, args);
             case Flink:
             default:
                 throw new Exception("not support");

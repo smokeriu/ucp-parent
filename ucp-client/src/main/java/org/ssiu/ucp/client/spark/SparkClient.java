@@ -32,15 +32,10 @@ public class SparkClient implements UcpClient {
         this.sparkAppArgs = sparkAppArgs;
     }
 
-    public static SparkClient from(String[] args) {
-        final BaseAppArgs appArgs = new BaseAppArgs();
-        JCommander.newBuilder()
-                .args(args)
-                .addObject(appArgs)
-                .build();
+    public static SparkClient from(BaseAppArgs appArgs, String[] oriArgs) {
         final SparkClient sparkClient = new SparkClient(appArgs);
         sparkClient.initClient();
-        sparkClient.setOriArgs(args);
+        sparkClient.setOriArgs(oriArgs);
         return sparkClient;
     }
 
