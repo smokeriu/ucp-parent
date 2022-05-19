@@ -1,6 +1,9 @@
 package org.ssiu.ucp.spark.connector.jdbc
 
+import java.sql.{Connection, DriverManager}
+
 import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.spark.sql.util.CaseInsensitiveStringMap
 import org.ssiu.ucp.spark.core.util.ConfigImplicit._
 
 import scala.collection.JavaConverters._
@@ -17,6 +20,15 @@ case class JdbcConfig private(url: String,
                               password: String,
                               extraOption: collection.Map[String, String]) {
 
+  /**
+   * @throws ClassNotFoundException happen when Class.forName(driver)
+   * @throws java.sql.SQLException  happen when getConnection
+   * @return
+   */
+  def getConnection: Connection = {
+    Class.forName(driver)
+    DriverManager.getConnection(url, user, password)
+  }
 
 }
 
@@ -45,6 +57,15 @@ object JdbcConfig {
     val user = connectInfo.getString(Jdbc.USER)
     val password = connectInfo.getString(Jdbc.PASSWORD)
     JdbcConfig(url, driver, tbName, user, password, extraOption)
+  }
+
+  def apply(map: CaseInsensitiveStringMap): JdbcConfig = {
+    val url = map.get(Jdbc.URL)
+    val driver = map.get(Jdbc.DRIVER)
+    val tbName = map.get(Jdbc.TB_NAME)
+    val user = map.get(Jdbc.USER)
+    val password = map.get(Jdbc.PASSWORD)
+    JdbcConfig(url, driver, tbName, user, password, null)
   }
 
   private def jdbcUrl(format: String, host: String, port: Int, dbName: String, extraOption: collection.Map[String, String]): String = {

@@ -1,5 +1,8 @@
 package org.ssiu.ucp.spark.connector.jdbc
 
+import java.util
+import java.util.Properties
+
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCOptions
 import org.apache.spark.sql.{DataFrame, DataFrameReader}
@@ -10,8 +13,6 @@ import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
 import org.ssiu.ucp.spark.core.util.ConfigImplicit.RichConfig
 import org.ssiu.ucp.spark.core.util.SparkConfig
 
-import java.util
-import java.util.Properties
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 import scala.collection.mutable
 
@@ -71,13 +72,7 @@ class Jdbc extends SparkSingleBatchConnector {
    * @param config element config
    */
   override protected def singleBatchWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): Unit = {
-    val saveMode = config.optionalString(Jdbc.SAVE_MODE).getOrElse(Jdbc.SAVE_MODE_DEFAULT)
-    val sparkConfig = sparkOptions(config)
-    input.write
-      .mode(saveMode)
-      .format("jdbc")
-      .options(sparkConfig)
-      .save()
+    jdbcBatchWrite(input, config)
   }
 
   /**
@@ -200,6 +195,16 @@ class Jdbc extends SparkSingleBatchConnector {
     val lastStart = head.maxBy(_._2)._2
     head.+:((lastStart, endTime))
   }
+
+  protected def jdbcBatchWrite(input: DataFrame, config: Config): Unit = {
+    val saveMode = config.optionalString(Jdbc.SAVE_MODE).getOrElse(Jdbc.SAVE_MODE_DEFAULT)
+    val sparkConfig = sparkOptions(config)
+    input.write
+      .mode(saveMode)
+      .format("jdbc")
+      .options(sparkConfig)
+      .save()
+  }
 }
 
 object Jdbc {
@@ -225,16 +230,13 @@ object Jdbc {
 
   val PASSWORD: String = "password"
 
-  // options
-  val SAVE_MODE: String = "saveMode"
-  val SAVE_MODE_DEFAULT = "append"
-
+  //// Read option
   // single(default), increment, distribute
   val READ_MODE: String = "readMode"
   val READ_MODE_SINGLE = "single"
   val READ_MODE_INCREMENT = "increment"
   val READ_MODE_DISTRIBUTE = "distribute"
-  val READ_MODE_DEFAULT = READ_MODE_SINGLE
+  val READ_MODE_DEFAULT: String = READ_MODE_SINGLE
 
 
   // increment & distribute only
@@ -251,6 +253,11 @@ object Jdbc {
   // extra options
   val EXTRA_OPTIONS = "extraOptions"
 
+  //// WriteOption
+  // saveMode
+  val SAVE_MODE: String = "saveMode"
+  val SAVE_MODE_DEFAULT = "append"
+
   private def validateConfOption[T](config: Config,
                                     option: String,
                                     addResFunc: CheckResult => T,
@@ -266,4 +273,6 @@ object Jdbc {
   private def missingConfigCheckResult(missingConfig: String, level: String): CheckResult = {
     CheckResult.error(s"missing config in Jdbc connector in $level level: $missingConfig")
   }
+
+
 }
