@@ -34,7 +34,7 @@ class SparkApp private(val appConfig: AppConfig) extends AppTrait {
 
   private var env: SparkRuntimeEnv = _
 
-  private var tableProvider: TableProvider[DataFrame] = _
+  private var tableProvider: TableProvider[SparkRuntimeEnv, DataFrame] = _
 
   private var workFlow: AbstractFlow = _
 

@@ -18,13 +18,15 @@
 
 package org.ssiu.ucp.core.service;
 
+import org.ssiu.ucp.core.env.RuntimeEnv;
+
 import java.util.Optional;
 
-public interface TableProvider<T> {
+public interface TableProvider<E extends RuntimeEnv,T> {
 
 
-    Optional<T> getTable(String name) ;
+    Optional<T> getTable(E env,String name) ;
 
-    void addTable(String name, T t) ;
+    void addTable(E env,String name, T t) ;
 
 }
