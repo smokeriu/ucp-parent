@@ -16,37 +16,30 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.execution;
+package org.ssiu.ucp.flink.core.service;
 
-import org.ssiu.ucp.common.mode.JobLevel;
-import org.ssiu.ucp.core.util.CheckResult;
+import org.apache.flink.table.api.Table;
+import org.ssiu.ucp.core.service.TableProvider;
+import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
-/**
- * A app trait to submit app job
- */
-public interface AppTrait {
+public class FlinkTableProvider implements TableProvider<FlinkRuntimeEnv, Table> {
 
-    /**
-     * prepare work for app
-     */
-    void prepareApp() throws Exception;
+    private final Map<String, Table> cache = new HashMap<>();
 
-    /**
-     * @return is dev app or release app
-     */
-    JobLevel appLevel();
+    @Override
+    public Optional<Table> getTable(FlinkRuntimeEnv env, String name) {
+        return Optional.ofNullable(cache.get(name));
+    }
 
-    /**
-     * Check app is validate
-     *
-     * @return a mutable list contains all check result
-     */
-    List<CheckResult> checkApp();
-
-    /**
-     * submit app
-     */
-    void submit() throws Exception;
+    @Override
+    public void addTable(FlinkRuntimeEnv env, String name, Table table) {
+        if (!cache.containsKey(name)) {
+            env.getStreamTableEnv().createTemporaryView(name, table);
+            cache.put(name, table);
+        }
+    }
 }

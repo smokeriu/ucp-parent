@@ -16,37 +16,18 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.execution;
+package org.ssiu.ucp.flink.core.workflow;
 
-import org.ssiu.ucp.common.mode.JobLevel;
-import org.ssiu.ucp.core.util.CheckResult;
+import org.apache.flink.table.api.Table;
+import org.ssiu.ucp.common.api.Element;
+import org.ssiu.ucp.core.service.TableProvider;
+import org.ssiu.ucp.core.workflow.UniversalFlow;
+import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 
 import java.util.List;
 
-/**
- * A app trait to submit app job
- */
-public interface AppTrait {
-
-    /**
-     * prepare work for app
-     */
-    void prepareApp() throws Exception;
-
-    /**
-     * @return is dev app or release app
-     */
-    JobLevel appLevel();
-
-    /**
-     * Check app is validate
-     *
-     * @return a mutable list contains all check result
-     */
-    List<CheckResult> checkApp();
-
-    /**
-     * submit app
-     */
-    void submit() throws Exception;
+public class FlinkFlow extends UniversalFlow<FlinkRuntimeEnv, Table> {
+    public FlinkFlow(List<Element> elementList, TableProvider<FlinkRuntimeEnv, Table> tableProvider, FlinkRuntimeEnv env) {
+        super(elementList, tableProvider, env);
+    }
 }

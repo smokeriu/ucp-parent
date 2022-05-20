@@ -16,37 +16,18 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.execution;
+package org.ssiu.ucp.flink.core;
 
-import org.ssiu.ucp.common.mode.JobLevel;
-import org.ssiu.ucp.core.util.CheckResult;
+import org.ssiu.ucp.core.execution.UcpWork;
+import org.ssiu.ucp.flink.core.exec.FlinkApp;
+import org.ssiu.ucp.flink.core.util.FlinkAppConfigHolder;
 
-import java.util.List;
+public class App {
 
-/**
- * A app trait to submit app job
- */
-public interface AppTrait {
-
-    /**
-     * prepare work for app
-     */
-    void prepareApp() throws Exception;
-
-    /**
-     * @return is dev app or release app
-     */
-    JobLevel appLevel();
-
-    /**
-     * Check app is validate
-     *
-     * @return a mutable list contains all check result
-     */
-    List<CheckResult> checkApp();
-
-    /**
-     * submit app
-     */
-    void submit() throws Exception;
+    public static void main(String[] args) throws Exception {
+        final FlinkAppConfigHolder flinkAppConfigHolder = new FlinkAppConfigHolder(args);
+        final FlinkApp flinkApp = new FlinkApp();
+        flinkApp.setAppConfig(flinkAppConfigHolder.getAppConfig());
+        UcpWork.execute(flinkApp);
+    }
 }

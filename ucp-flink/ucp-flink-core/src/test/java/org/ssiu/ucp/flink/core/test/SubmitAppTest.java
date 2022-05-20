@@ -16,37 +16,23 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.execution;
+package org.ssiu.ucp.flink.core.test;
 
-import org.ssiu.ucp.common.mode.JobLevel;
-import org.ssiu.ucp.core.util.CheckResult;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.ssiu.ucp.flink.core.App;
 
-import java.util.List;
+public class SubmitAppTest {
 
-/**
- * A app trait to submit app job
- */
-public interface AppTrait {
+    @BeforeEach
+    public void setUp() {
 
-    /**
-     * prepare work for app
-     */
-    void prepareApp() throws Exception;
+    }
 
-    /**
-     * @return is dev app or release app
-     */
-    JobLevel appLevel();
+    @Test
+    public void test() throws Exception {
+        String[] args = {"-D", "client", "-C", "/ucp-parent/ucp-flink/ucp-flink-core/src/test/resources/app.conf", "-E", "Flink"};
+        App.main(args);
+    }
 
-    /**
-     * Check app is validate
-     *
-     * @return a mutable list contains all check result
-     */
-    List<CheckResult> checkApp();
-
-    /**
-     * submit app
-     */
-    void submit() throws Exception;
 }

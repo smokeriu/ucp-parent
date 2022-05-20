@@ -16,37 +16,22 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.execution;
+package org.ssiu.ucp.flink.core.command;
 
-import org.ssiu.ucp.common.mode.JobLevel;
-import org.ssiu.ucp.core.util.CheckResult;
+import com.beust.jcommander.Parameter;
+import org.ssiu.ucp.core.command.BaseAppArgs;
 
-import java.util.List;
+public class FlinkAppArgs extends BaseAppArgs {
 
-/**
- * A app trait to submit app job
- */
-public interface AppTrait {
+    @Parameter(names = {"-D", "--deploy-mode"}, description = "client/ cluster/ ...")
+    private String deployMode;
 
-    /**
-     * prepare work for app
-     */
-    void prepareApp() throws Exception;
+    // in flink. always client mode
+    public String getDeployMode() {
+        return "client";
+    }
 
-    /**
-     * @return is dev app or release app
-     */
-    JobLevel appLevel();
-
-    /**
-     * Check app is validate
-     *
-     * @return a mutable list contains all check result
-     */
-    List<CheckResult> checkApp();
-
-    /**
-     * submit app
-     */
-    void submit() throws Exception;
+    public void setDeployMode(String deployMode) {
+        this.deployMode = deployMode;
+    }
 }

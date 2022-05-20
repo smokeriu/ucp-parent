@@ -16,37 +16,28 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.execution;
+package org.ssiu.ucp.flink.core.util;
 
-import org.ssiu.ucp.common.mode.JobLevel;
-import org.ssiu.ucp.core.util.CheckResult;
+import com.beust.jcommander.JCommander;
+import org.ssiu.ucp.common.service.AppConfig;
+import org.ssiu.ucp.flink.core.command.FlinkAppArgs;
 
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-/**
- * A app trait to submit app job
- */
-public interface AppTrait {
+public class FlinkAppConfigHolder {
+    private final FlinkAppArgs flinkAppArgs;
 
-    /**
-     * prepare work for app
-     */
-    void prepareApp() throws Exception;
+    public FlinkAppConfigHolder(String[] args) {
+        flinkAppArgs = new FlinkAppArgs();
+        JCommander.newBuilder().args(args)
+                .addObject(flinkAppArgs)
+                .build();
+    }
 
-    /**
-     * @return is dev app or release app
-     */
-    JobLevel appLevel();
-
-    /**
-     * Check app is validate
-     *
-     * @return a mutable list contains all check result
-     */
-    List<CheckResult> checkApp();
-
-    /**
-     * submit app
-     */
-    void submit() throws Exception;
+    public AppConfig getAppConfig() {
+        final String configFile = flinkAppArgs.getConfigFile();
+        final Path path = Paths.get(configFile);
+        return AppConfig.fromFile(path.toFile());
+    }
 }

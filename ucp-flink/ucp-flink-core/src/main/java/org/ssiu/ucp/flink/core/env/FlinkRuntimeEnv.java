@@ -18,15 +18,28 @@
 
 package org.ssiu.ucp.flink.core.env;
 
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.ssiu.ucp.common.config.JobConfig;
 import org.ssiu.ucp.core.env.RuntimeEnv;
 import org.ssiu.ucp.core.util.CheckResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlinkRuntimeEnv implements RuntimeEnv {
 
     private JobConfig jobConfig;
+
+    /**
+     * Use streamEnv to interaction with StreamAPI
+     */
+    private StreamExecutionEnvironment streamEnv;
+
+    /**
+     * Use streamTableEnv to interaction between TableAPI and StreamAPI
+     */
+    private StreamTableEnvironment streamTableEnv;
 
     @Override
     public void setConfig(JobConfig config) {
@@ -40,12 +53,21 @@ public class FlinkRuntimeEnv implements RuntimeEnv {
 
     @Override
     public List<CheckResult> checkConfig() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
-    public void prepare() throws Exception {
+    public void prepare()  {
+        streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamTableEnv = StreamTableEnvironment.create(streamEnv);
+    }
 
+    public StreamExecutionEnvironment getStreamEnv() {
+        return streamEnv;
+    }
+
+    public StreamTableEnvironment getStreamTableEnv() {
+        return streamTableEnv;
     }
 
     @Override
