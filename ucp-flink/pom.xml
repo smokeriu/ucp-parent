@@ -29,6 +29,8 @@ under the License.
     <name>${project.artifactId}</name>
     <modules>
         <module>ucp-flink-core</module>
+        <module>ucp-flink-dist</module>
+        <module>ucp-flink-connector</module>
     </modules>
 
 </project>

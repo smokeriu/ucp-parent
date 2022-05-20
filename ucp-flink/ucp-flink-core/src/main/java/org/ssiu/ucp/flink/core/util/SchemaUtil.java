@@ -19,31 +19,28 @@
 package org.ssiu.ucp.flink.core.util;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigValue;
+import org.apache.flink.table.api.Schema;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class MapUtil {
-    public static <V> V getAnyValue(Map<?, V> inputs) {
-        return inputs.entrySet().iterator().next().getValue();
+public class SchemaUtil {
+
+    public static Schema fromMap(Map<String, String> schemaMap) {
+        final Schema.Builder schemaBuilder = Schema.newBuilder();
+        for (Map.Entry<String, String> entry : schemaMap.entrySet()) {
+            final String columnName = entry.getKey();
+            final String columnType = entry.getValue();
+            schemaBuilder.column(columnName, columnType);
+        }
+        return schemaBuilder.build();
     }
 
-
-    public static Map<String, ConfigValue> mapFromConfig(Config config, String name) {
-        final HashMap<String, ConfigValue> map = new HashMap<>();
-        if (config.hasPath(name)) {
-            map.putAll(config.getConfig(name).root());
-        }
-        return map;
-    }
-
-    public static Map<String, String> stringMapFromConfig(Config config, String name) {
-        final Map<String, ConfigValue> configValueMap = mapFromConfig(config, name);
-        final HashMap<String, String> map = new HashMap<>();
-        for (Map.Entry<String, ConfigValue> entry : configValueMap.entrySet()) {
-            map.put(entry.getKey(), entry.getValue().toString());
-        }
-        return map;
+    public static Schema fromConfig(Config config) {
+        final Map<String, String> schemaMap = config.root()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().unwrapped().toString()));
+        return fromMap(schemaMap);
     }
 }

@@ -100,6 +100,11 @@
                 <artifactId>ucp-spark-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.ssiu.ucp</groupId>
+                <artifactId>ucp-flink-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- utils -->
             <!-- lang -->
