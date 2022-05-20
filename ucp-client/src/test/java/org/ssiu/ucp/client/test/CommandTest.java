@@ -16,23 +16,18 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.flink.core.command;
+package org.ssiu.ucp.client.test;
 
-import com.beust.jcommander.Parameter;
-import org.ssiu.ucp.core.command.BaseAppArgs;
+import org.junit.jupiter.api.Test;
+import org.ssiu.ucp.client.App;
 
-public class FlinkAppArgs extends BaseAppArgs {
 
-    private static final long serialVersionUID = -2355728894483387402L;
-    @Parameter(names = {"-D", "--deploy-mode"}, description = "client/ cluster/ ...")
-    private String deployMode;
+public class CommandTest {
 
-    // in flink. always client mode
-    public String getDeployMode() {
-        return "client";
-    }
-
-    public void setDeployMode(String deployMode) {
-        this.deployMode = deployMode;
+    @Test
+    public void flinkTest() throws Exception {
+        System.out.println("test");
+        String[] in = {"-C", "/ucp-parent/ucp-client/src/test/resources/flinkBase.conf", "-E", "Flink", "-D","local"};
+        App.main(in);
     }
 }
