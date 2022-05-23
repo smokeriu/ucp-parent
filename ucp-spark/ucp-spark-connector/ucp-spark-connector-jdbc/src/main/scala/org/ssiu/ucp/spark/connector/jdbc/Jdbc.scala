@@ -1,21 +1,23 @@
 package org.ssiu.ucp.spark.connector.jdbc
 
+import java.util
+import java.util.Properties
+
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCOptions
+import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, DataFrameReader}
 import org.ssiu.ucp.core.util.CheckResult
 import org.ssiu.ucp.spark.connector.jdbc.Jdbc.validateConfOption
-import org.ssiu.ucp.spark.core.api.SparkSingleBatchConnector
+import org.ssiu.ucp.spark.core.api.{SparkSingleBatchConnector, SparkSingleStreamWriter}
 import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
 import org.ssiu.ucp.spark.core.util.ConfigImplicit.RichConfig
 import org.ssiu.ucp.spark.core.util.SparkConfig
 
-import java.util
-import java.util.Properties
 import scala.collection.JavaConverters.mapAsScalaMapConverter
 import scala.collection.mutable
 
-class Jdbc extends SparkSingleBatchConnector {
+class Jdbc extends SparkSingleBatchConnector with SparkSingleStreamWriter {
 
 
   /**
@@ -71,13 +73,7 @@ class Jdbc extends SparkSingleBatchConnector {
    * @param config element config
    */
   override protected def singleBatchWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): Unit = {
-    val saveMode = config.optionalString(Jdbc.SAVE_MODE).getOrElse(Jdbc.SAVE_MODE_DEFAULT)
-    val sparkConfig = sparkOptions(config)
-    input.write
-      .mode(saveMode)
-      .format("jdbc")
-      .options(sparkConfig)
-      .save()
+    jdbcBatchWrite(input, config)
   }
 
   /**
@@ -200,6 +196,36 @@ class Jdbc extends SparkSingleBatchConnector {
     val lastStart = head.maxBy(_._2)._2
     head.+:((lastStart, endTime))
   }
+
+  protected def jdbcBatchWrite(input: DataFrame, config: Config): Unit = {
+    val saveMode = config.optionalString(Jdbc.SAVE_MODE).getOrElse(Jdbc.SAVE_MODE_DEFAULT)
+    val sparkConfig = sparkOptions(config)
+    input.write
+      .mode(saveMode)
+      .format("jdbc")
+      .options(sparkConfig)
+      .save()
+  }
+
+  /**
+   * write a single table to external storage in streaming mode
+   *
+   * @param input  stream input
+   * @param env    spark env
+   * @param config element config
+   */
+  override protected def singleStreamWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): Unit = {
+    // Currently, we only offer Mode micro batch.
+    val sparkConfig = sparkOptions(config)
+    val trigger = Trigger.ProcessingTime(config.optionalLong(Jdbc.MICRO_BATCH_INTERVAL).getOrElse(Jdbc.MICRO_BATCH_INTERVAL_DEFAULT))
+    val query = input.writeStream
+      .format("ucp.jdbc")
+      .options(sparkConfig)
+      .trigger(trigger)
+      .start()
+
+    query.awaitTermination()
+  }
 }
 
 object Jdbc {
@@ -225,16 +251,13 @@ object Jdbc {
 
   val PASSWORD: String = "password"
 
-  // options
-  val SAVE_MODE: String = "saveMode"
-  val SAVE_MODE_DEFAULT = "append"
-
+  //// Read option
   // single(default), increment, distribute
   val READ_MODE: String = "readMode"
   val READ_MODE_SINGLE = "single"
   val READ_MODE_INCREMENT = "increment"
   val READ_MODE_DISTRIBUTE = "distribute"
-  val READ_MODE_DEFAULT = READ_MODE_SINGLE
+  val READ_MODE_DEFAULT: String = READ_MODE_SINGLE
 
 
   // increment & distribute only
@@ -251,6 +274,15 @@ object Jdbc {
   // extra options
   val EXTRA_OPTIONS = "extraOptions"
 
+  //// WriteOption
+  // saveMode
+  val SAVE_MODE: String = "saveMode"
+  val SAVE_MODE_DEFAULT = "append"
+
+  // stream use
+  val MICRO_BATCH_INTERVAL = "microBatchInterval"
+  val MICRO_BATCH_INTERVAL_DEFAULT = 1000L
+
   private def validateConfOption[T](config: Config,
                                     option: String,
                                     addResFunc: CheckResult => T,
@@ -266,4 +298,6 @@ object Jdbc {
   private def missingConfigCheckResult(missingConfig: String, level: String): CheckResult = {
     CheckResult.error(s"missing config in Jdbc connector in $level level: $missingConfig")
   }
+
+
 }
