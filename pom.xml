@@ -35,8 +35,8 @@
         <module>ucp-spark</module>
         <module>ucp-client</module>
         <module>ucp-util</module>
-        <module>ucp-dist</module>
         <module>ucp-flink</module>
+        <module>ucp-dist</module>
     </modules>
 
     <properties>

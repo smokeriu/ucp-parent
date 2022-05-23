@@ -84,7 +84,7 @@
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <finalName>ucp-spark-core</finalName>
+                    <finalName>ucp-spark-app</finalName>
                 </configuration>
             </plugin>
             <!-- export lib -->

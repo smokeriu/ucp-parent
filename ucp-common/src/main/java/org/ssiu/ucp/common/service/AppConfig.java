@@ -26,7 +26,6 @@ import org.ssiu.ucp.common.config.ClientConfig;
 import org.ssiu.ucp.common.config.JobConfig;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,15 +75,17 @@ public class AppConfig {
                 .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
                 .resolveWith(ConfigFactory.systemProperties(),
                         ConfigResolveOptions.defaults().setAllowUnresolved(true));
+        PrintConfig(fileConfig);
         return new AppConfig(fileConfig);
     }
 
-    public static AppConfig fromFile(File file){
-        LOG.info("Load config from File: {}", file.getName());
+    public static AppConfig fromFile(File file) {
+        LOG.info("Load config from File: {}", file);
         final Config fileConfig = ConfigFactory.parseFile(file)
                 .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
                 .resolveWith(ConfigFactory.systemProperties(),
                         ConfigResolveOptions.defaults().setAllowUnresolved(true));
+        PrintConfig(fileConfig);
         return new AppConfig(fileConfig);
     }
 
@@ -94,7 +95,13 @@ public class AppConfig {
                 .resolve(ConfigResolveOptions.defaults().setAllowUnresolved(true))
                 .resolveWith(ConfigFactory.systemProperties(),
                         ConfigResolveOptions.defaults().setAllowUnresolved(true));
+        PrintConfig(fileConfig);
         return new AppConfig(fileConfig);
+    }
+
+    private static void PrintConfig(Config config) {
+        ConfigRenderOptions options = ConfigRenderOptions.concise().setFormatted(true);
+        LOG.info("Loaded config: {}", config.root().render(options));
     }
 
     public String serialization() {

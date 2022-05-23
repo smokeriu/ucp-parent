@@ -19,9 +19,12 @@
 package org.ssiu.ucp.flink.core.util;
 
 import com.beust.jcommander.JCommander;
+import com.typesafe.config.ConfigFactory;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.ssiu.ucp.common.service.AppConfig;
 import org.ssiu.ucp.flink.core.command.FlinkAppArgs;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -32,6 +35,7 @@ public class FlinkAppConfigHolder {
         flinkAppArgs = new FlinkAppArgs();
         JCommander.newBuilder().args(args)
                 .addObject(flinkAppArgs)
+                .acceptUnknownOptions(true)
                 .build();
     }
 

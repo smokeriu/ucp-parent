@@ -69,7 +69,7 @@
         <fileSet>
             <directory>../ucp-spark/ucp-spark-core/target</directory>
             <includes>
-                <include>ucp-spark-core*.jar</include>
+                <include>ucp-spark-app*.jar</include>
             </includes>
             <excludes>
                 <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
@@ -138,6 +138,18 @@
                 <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
             </excludes>
             <outputDirectory>/spark/operator</outputDirectory>
+        </fileSet>
+
+        <!-- flink -->
+        <fileSet>
+            <directory>../ucp-flink/ucp-flink-dist/target</directory>
+            <includes>
+                <include>ucp-flink-app*.jar</include>
+            </includes>
+            <excludes>
+                <exclude>%regex[.*((javadoc)|(sources))\.jar]</exclude>
+            </excludes>
+            <outputDirectory>/flink</outputDirectory>
         </fileSet>
 
 

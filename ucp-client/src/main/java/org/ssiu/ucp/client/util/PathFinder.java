@@ -43,7 +43,7 @@ public class PathFinder {
 
     private final static String UCP_LIB_PATH = "lib";
 
-    private final static String APP_NAME = "core";
+    private final static String APP_NAME = "app";
 
     private final static String JAR_SUFFIX = "jar";
 
