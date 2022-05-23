@@ -16,17 +16,15 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.core.api;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import org.apache.flink.table.api.Table;
+import org.ssiu.ucp.core.api.StreamWriter;
+import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 
-import java.util.Optional;
-
-public interface TableProvider<E extends RuntimeEnv,T> {
-
-
-    Optional<T> getTable(E env,String name) ;
-
-    void addTable(E env,String name, T t) ;
+/**
+ * If want use DataStream. User can convert from Table
+ */
+interface FlinkStreamWriter extends StreamWriter<FlinkRuntimeEnv, Table> {
 
 }

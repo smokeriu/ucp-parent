@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.client.test;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
-
-import java.util.Optional;
-
-public interface TableProvider<E extends RuntimeEnv,T> {
+import org.junit.jupiter.api.Test;
+import org.ssiu.ucp.client.App;
 
 
-    Optional<T> getTable(E env,String name) ;
+public class CommandTest {
 
-    void addTable(E env,String name, T t) ;
-
+    @Test
+    public void flinkTest() throws Exception {
+        System.out.println("test");
+        String[] in = {"-C", "/ucp-parent/ucp-client/src/test/resources/flinkBase.conf", "-E", "Flink", "-D","local"};
+        App.main(in);
+    }
 }

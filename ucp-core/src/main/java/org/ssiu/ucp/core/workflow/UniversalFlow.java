@@ -63,7 +63,7 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
     /**
      * Provide and cache intermediate results
      */
-    private final TableProvider<T> tableProvider;
+    private final TableProvider<E, T> tableProvider;
 
     /**
      * Initialize and manage the required plug-ins
@@ -71,7 +71,7 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
     private PluginManager<E> pluginManager;
 
     public UniversalFlow(List<Element> elementList,
-                         TableProvider<T> tableProvider,
+                         TableProvider<E, T> tableProvider,
                          E env) {
         this.elementList = elementList;
         this.env = env;
@@ -125,10 +125,10 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
         final List<String> parentNames = element.getParentNames();
         final Map<String, T> parentCache = new HashMap<>(parentNames.size());
         for (String parentName : parentNames) {
-            final Optional<T> table = tableProvider.getTable(parentName);
+            final Optional<T> table = tableProvider.getTable(env, parentName);
             if (!table.isPresent()) {
                 final T t = runElement(elementDTOMap.get(parentName));
-                tableProvider.addTable(parentName, t);
+                tableProvider.addTable(env, parentName, t);
                 parentCache.put(parentName, t);
             } else {
                 parentCache.put(parentName, table.get());

@@ -16,17 +16,20 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.connector.fake.test;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import org.junit.jupiter.api.Test;
+import org.ssiu.ucp.flink.core.App;
 
-import java.util.Optional;
+public class FakeTest {
 
-public interface TableProvider<E extends RuntimeEnv,T> {
+    // we can not use a junit to test this
+    public void test1() throws Exception {
+        String[] args = {"-D", "client", "-C", "/ucp-parent/ucp-flink/ucp-flink-connector/ucp-flink-connector-fake/src/test/resources/app.conf", "-E", "Flink"};
+        App.main(args);
+    }
 
-
-    Optional<T> getTable(E env,String name) ;
-
-    void addTable(E env,String name, T t) ;
-
+    public static void main(String[] args) throws Exception {
+        new FakeTest().test1();
+    }
 }

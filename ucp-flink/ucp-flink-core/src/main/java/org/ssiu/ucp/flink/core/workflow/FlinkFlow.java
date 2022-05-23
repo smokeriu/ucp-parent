@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.core.workflow;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import org.apache.flink.table.api.Table;
+import org.ssiu.ucp.common.api.Element;
+import org.ssiu.ucp.core.service.TableProvider;
+import org.ssiu.ucp.core.workflow.UniversalFlow;
+import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 
-import java.util.Optional;
+import java.util.List;
 
-public interface TableProvider<E extends RuntimeEnv,T> {
-
-
-    Optional<T> getTable(E env,String name) ;
-
-    void addTable(E env,String name, T t) ;
-
+public class FlinkFlow extends UniversalFlow<FlinkRuntimeEnv, Table> {
+    public FlinkFlow(List<Element> elementList, TableProvider<FlinkRuntimeEnv, Table> tableProvider, FlinkRuntimeEnv env) {
+        super(elementList, tableProvider, env);
+    }
 }

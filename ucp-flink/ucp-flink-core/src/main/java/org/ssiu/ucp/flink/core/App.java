@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.core;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import org.ssiu.ucp.core.execution.UcpWork;
+import org.ssiu.ucp.flink.core.exec.FlinkApp;
+import org.ssiu.ucp.flink.core.util.FlinkAppConfigHolder;
 
-import java.util.Optional;
+public class App {
 
-public interface TableProvider<E extends RuntimeEnv,T> {
-
-
-    Optional<T> getTable(E env,String name) ;
-
-    void addTable(E env,String name, T t) ;
-
+    public static void main(String[] args) throws Exception {
+        final FlinkAppConfigHolder flinkAppConfigHolder = new FlinkAppConfigHolder(args);
+        final FlinkApp flinkApp = new FlinkApp();
+        flinkApp.setAppConfig(flinkAppConfigHolder.getAppConfig());
+        UcpWork.execute(flinkApp);
+    }
 }

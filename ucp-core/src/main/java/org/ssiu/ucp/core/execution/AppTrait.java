@@ -31,7 +31,7 @@ public interface AppTrait {
     /**
      * prepare work for app
      */
-    void prepareApp();
+    void prepareApp() throws Exception;
 
     /**
      * @return is dev app or release app

@@ -16,17 +16,23 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.core.command;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import com.beust.jcommander.Parameter;
+import org.ssiu.ucp.core.command.BaseAppArgs;
 
-import java.util.Optional;
+public class FlinkAppArgs extends BaseAppArgs {
 
-public interface TableProvider<E extends RuntimeEnv,T> {
+    private static final long serialVersionUID = -2355728894483387402L;
+    @Parameter(names = {"-D", "--deploy-mode"}, description = "client/ cluster/ ...")
+    private String deployMode;
 
+    // in flink. always client mode
+    public String getDeployMode() {
+        return "client";
+    }
 
-    Optional<T> getTable(E env,String name) ;
-
-    void addTable(E env,String name, T t) ;
-
+    public void setDeployMode(String deployMode) {
+        this.deployMode = deployMode;
+    }
 }

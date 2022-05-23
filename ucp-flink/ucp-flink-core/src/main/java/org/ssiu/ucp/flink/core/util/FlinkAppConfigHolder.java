@@ -16,17 +16,28 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.core.util;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import com.beust.jcommander.JCommander;
+import org.ssiu.ucp.common.service.AppConfig;
+import org.ssiu.ucp.flink.core.command.FlinkAppArgs;
 
-import java.util.Optional;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public interface TableProvider<E extends RuntimeEnv,T> {
+public class FlinkAppConfigHolder {
+    private final FlinkAppArgs flinkAppArgs;
 
+    public FlinkAppConfigHolder(String[] args) {
+        flinkAppArgs = new FlinkAppArgs();
+        JCommander.newBuilder().args(args)
+                .addObject(flinkAppArgs)
+                .build();
+    }
 
-    Optional<T> getTable(E env,String name) ;
-
-    void addTable(E env,String name, T t) ;
-
+    public AppConfig getAppConfig() {
+        final String configFile = flinkAppArgs.getConfigFile();
+        final Path path = Paths.get(configFile);
+        return AppConfig.fromFile(path.toFile());
+    }
 }

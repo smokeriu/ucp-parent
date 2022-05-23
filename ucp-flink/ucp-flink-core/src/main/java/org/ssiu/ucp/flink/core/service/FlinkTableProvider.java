@@ -16,17 +16,30 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.core.service;
+package org.ssiu.ucp.flink.core.service;
 
-import org.ssiu.ucp.core.env.RuntimeEnv;
+import org.apache.flink.table.api.Table;
+import org.ssiu.ucp.core.service.TableProvider;
+import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public interface TableProvider<E extends RuntimeEnv,T> {
+public class FlinkTableProvider implements TableProvider<FlinkRuntimeEnv, Table> {
 
+    private final Map<String, Table> cache = new HashMap<>();
 
-    Optional<T> getTable(E env,String name) ;
+    @Override
+    public Optional<Table> getTable(FlinkRuntimeEnv env, String name) {
+        return Optional.ofNullable(cache.get(name));
+    }
 
-    void addTable(E env,String name, T t) ;
-
+    @Override
+    public void addTable(FlinkRuntimeEnv env, String name, Table table) {
+        if (!cache.containsKey(name)) {
+            env.getStreamTableEnv().createTemporaryView(name, table);
+            cache.put(name, table);
+        }
+    }
 }
