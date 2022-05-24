@@ -20,6 +20,7 @@ package org.ssiu.ucp.flink.core.api;
 
 import com.typesafe.config.Config;
 import org.apache.flink.table.api.Table;
+import org.apache.flink.table.api.TableResult;
 import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 import org.ssiu.ucp.flink.core.util.MapUtil;
 
@@ -33,10 +34,12 @@ import java.util.Map;
  * @implNote If there is a real need to implement them separately, the user just needs to override singleBatchWrite for Batch mode.
  */
 public abstract class FlinkSingleWriter implements FlinkStreamWriter, FlinkBatchWriter {
+    private static final long serialVersionUID = 7624252192569808855L;
+
     @Override
-    public void streamWrite(Map<String, Table> inputs, FlinkRuntimeEnv env, Config config) throws Exception {
+    public TableResult streamWrite(Map<String, Table> inputs, FlinkRuntimeEnv env, Config config) throws Exception {
         Table anyTable = MapUtil.getAnyValue(inputs);
-        singleWrite(anyTable, env, config);
+        return singleWrite(anyTable, env, config);
     }
 
 
@@ -69,5 +72,5 @@ public abstract class FlinkSingleWriter implements FlinkStreamWriter, FlinkBatch
      * @param env    flink env
      * @param config config for this element
      */
-    abstract protected void singleWrite(Table input, FlinkRuntimeEnv env, Config config) throws Exception;
+    abstract protected TableResult singleWrite(Table input, FlinkRuntimeEnv env, Config config) throws Exception;
 }

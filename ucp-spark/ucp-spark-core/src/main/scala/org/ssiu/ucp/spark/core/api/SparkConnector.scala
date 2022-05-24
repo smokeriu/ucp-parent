@@ -22,6 +22,7 @@ import java.util
 
 import com.typesafe.config.Config
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.streaming.StreamingQuery
 import org.ssiu.ucp.core.api.{BatchReader, BatchWriter, StreamReader, StreamWriter}
 import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
 
@@ -34,7 +35,7 @@ trait SparkBatchWriter extends BatchWriter[SparkRuntimeEnv, DataFrame]
 
 trait SparkStreamReader extends StreamReader[SparkRuntimeEnv, DataFrame]
 
-trait SparkStreamWriter extends StreamWriter[SparkRuntimeEnv, DataFrame]
+trait SparkStreamWriter extends StreamWriter[SparkRuntimeEnv, StreamingQuery, DataFrame]
 
 /**
  * A connector has stream write support.
@@ -45,7 +46,7 @@ trait SparkSingleStreamWriter extends SparkStreamWriter {
 
   import scala.collection.JavaConverters._
 
-  override def streamWrite(inputs: util.Map[String, DataFrame], env: SparkRuntimeEnv, config: Config): Unit = {
+  override def streamWrite(inputs: util.Map[String, DataFrame], env: SparkRuntimeEnv, config: Config): StreamingQuery = {
     singleStreamWrite(inputs.asScala.head._2, env, config)
   }
 
@@ -56,7 +57,7 @@ trait SparkSingleStreamWriter extends SparkStreamWriter {
    * @param env    spark env
    * @param config element config
    */
-  protected def singleStreamWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): Unit
+  protected def singleStreamWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): StreamingQuery
 }
 
 /**

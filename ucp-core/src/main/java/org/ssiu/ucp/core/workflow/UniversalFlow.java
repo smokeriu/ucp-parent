@@ -26,6 +26,7 @@ import org.ssiu.ucp.core.api.*;
 import org.ssiu.ucp.core.config.BasicConfig;
 import org.ssiu.ucp.core.env.RuntimeEnv;
 import org.ssiu.ucp.core.service.PluginManager;
+import org.ssiu.ucp.core.service.StreamQueryHandle;
 import org.ssiu.ucp.core.service.TableProvider;
 import org.ssiu.ucp.core.util.CheckResult;
 import org.ssiu.ucp.util.base.Tuple2;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
  * @param <E> Runtime environment of each engine
  * @author ssiu
  */
-public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
+public class UniversalFlow<E extends RuntimeEnv, Q, T> extends AbstractFlow {
 
 
     /**
@@ -54,6 +55,8 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
      * element list
      */
     private final List<Element> elementList;
+
+    private final StreamQueryHandle<E, Q> streamQueryHandle;
 
     /**
      * Runtime environment of each engine
@@ -72,8 +75,10 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
 
     public UniversalFlow(List<Element> elementList,
                          TableProvider<E, T> tableProvider,
+                         StreamQueryHandle<E, Q> streamQueryHandle,
                          E env) {
         this.elementList = elementList;
+        this.streamQueryHandle = streamQueryHandle;
         this.env = env;
         this.tableProvider = tableProvider;
     }
@@ -110,6 +115,7 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
         for (Element writer : writers) {
             runElement(writer);
         }
+        streamQueryHandle.execute(env);
     }
 
     /**
@@ -198,7 +204,8 @@ public class UniversalFlow<E extends RuntimeEnv, T> extends AbstractFlow {
             case Reader:
                 return ((StreamReader<E, T>) plugin).streamRead(env, elementConfig);
             case Writer:
-                ((StreamWriter<E, T>) plugin).streamWrite(parentCache, env, elementConfig);
+                final Q query = ((StreamWriter<E, Q, T>) plugin).streamWrite(parentCache, env, elementConfig);
+                streamQueryHandle.cacheQuery(env, query);
                 return null;
             case Operator:
                 return ((StreamOperator<E, T, T>) plugin).streamQuery(parentCache, env, elementConfig);

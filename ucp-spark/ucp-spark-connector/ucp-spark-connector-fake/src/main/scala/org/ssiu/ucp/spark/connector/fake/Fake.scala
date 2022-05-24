@@ -21,7 +21,7 @@ package org.ssiu.ucp.spark.connector.fake
 import com.typesafe.config.Config
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.catalyst.parser.CatalystSqlParser
-import org.apache.spark.sql.streaming.Trigger
+import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
 import org.apache.spark.sql.types.{StructField, StructType}
 import org.ssiu.ucp.spark.connector.fake.v2.FakeOption
 import org.ssiu.ucp.spark.core.api.{SparkSingleBatchConnector, SparkSingleStreamConnector}
@@ -83,8 +83,7 @@ class Fake extends SparkSingleBatchConnector with SparkSingleStreamConnector {
    * @param env    spark env
    * @param config element config
    */
-  override protected def singleStreamWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): Unit = {
-    val timeout = config.optionalString(Fake.TIMEOUT_MS).getOrElse(Fake.TIMEOUT_MS_DEFAULT)
+  override protected def singleStreamWrite(input: DataFrame, env: SparkRuntimeEnv, config: Config): StreamingQuery = {
     val sinkMode = config.optionalString(Fake.SINK_MODE).getOrElse(Fake.SINK_MODE_ONCE)
 
     val streamWriter = input.writeStream.format(FAKE_CONNECTOR_OUT)
@@ -99,12 +98,7 @@ class Fake extends SparkSingleBatchConnector with SparkSingleStreamConnector {
       case _ => throw new IllegalArgumentException(s"Unknown sink mode: $sinkMode")
     }
 
-    val query = streamWriter.start()
-
-    timeout match {
-      case Fake.TIMEOUT_MS_NO_LIMIT => query.awaitTermination()
-      case _ => query.awaitTermination(timeout.toLong)
-    }
+    streamWriter.start()
   }
 
   private def buildSchema(config: Config): StructType = {
@@ -144,11 +138,5 @@ object Fake {
   private final val SINK_MODE_CONTINUOUS = "continuous"
   private final val CONTINUOUS_TIME_INTERVAL_MS = "continuousTimeIntervalMs"
   private final val CONTINUOUS_TIME_INTERVAL_MS_DEFAULT = 1000L
-
-  // timeout
-  // provide noLimit/Long
-  private final val TIMEOUT_MS = "timeoutMs"
-  private final val TIMEOUT_MS_DEFAULT = "20000" // default 20s
-  private final val TIMEOUT_MS_NO_LIMIT = "noLimit"
 
 }

@@ -26,6 +26,7 @@ import org.ssiu.ucp.core.service.TableProvider;
 import org.ssiu.ucp.core.util.CheckResult;
 import org.ssiu.ucp.core.workflow.AbstractFlow;
 import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
+import org.ssiu.ucp.flink.core.service.FlinkQueryHandle;
 import org.ssiu.ucp.flink.core.service.FlinkTableProvider;
 import org.ssiu.ucp.flink.core.workflow.FlinkFlow;
 
@@ -48,8 +49,9 @@ public class FlinkApp implements AppTrait {
         env = new FlinkRuntimeEnv();
         env.setConfig(appConfig.getJobConfig());
         env.prepare();
+        final FlinkQueryHandle flinkQueryHandle = new FlinkQueryHandle();
         final TableProvider<FlinkRuntimeEnv, Table> tableProvider = new FlinkTableProvider();
-        workFlow = new FlinkFlow(appConfig.getElements(), tableProvider, env);
+        workFlow = new FlinkFlow(appConfig.getElements(), tableProvider, flinkQueryHandle, env);
         workFlow.initFlow();
     }
 

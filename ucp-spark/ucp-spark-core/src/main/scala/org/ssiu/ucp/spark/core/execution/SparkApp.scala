@@ -26,15 +26,12 @@ import org.ssiu.ucp.core.service.TableProvider
 import org.ssiu.ucp.core.util.CheckResult
 import org.ssiu.ucp.core.workflow.{AbstractFlow, UniversalFlow}
 import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
-import org.ssiu.ucp.spark.core.service.SparkTableProvider
-
+import org.ssiu.ucp.spark.core.service.{SparkQueryHandle, SparkTableProvider, SparkWorkflow}
 import java.{util => ju}
 
 class SparkApp private(val appConfig: AppConfig) extends AppTrait {
 
   private var env: SparkRuntimeEnv = _
-
-  private var tableProvider: TableProvider[SparkRuntimeEnv, DataFrame] = _
 
   private var workFlow: AbstractFlow = _
 
@@ -44,8 +41,9 @@ class SparkApp private(val appConfig: AppConfig) extends AppTrait {
   override def prepareApp(): Unit = {
     env = SparkRuntimeEnv(appConfig.getJobConfig)
     env.prepare()
-    tableProvider = SparkTableProvider()
-    workFlow = new UniversalFlow[SparkRuntimeEnv, DataFrame](appConfig.getElements, tableProvider, env)
+    val tableProvider = SparkTableProvider()
+    val sparkQueryHandle = SparkQueryHandle()
+    workFlow = SparkWorkflow(appConfig.getElements, tableProvider, sparkQueryHandle, env)
     workFlow.initFlow()
   }
 

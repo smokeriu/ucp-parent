@@ -20,11 +20,10 @@ package org.ssiu.ucp.flink.connector.fake;
 
 import com.typesafe.config.Config;
 import org.apache.flink.connector.datagen.table.DataGenConnectorOptions;
-import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.api.Schema;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableDescriptor;
-import org.apache.flink.table.catalog.ResolvedSchema;
+import org.apache.flink.table.api.TableResult;
 import org.ssiu.ucp.flink.core.api.FlinkBatchReader;
 import org.ssiu.ucp.flink.core.api.FlinkSingleWriter;
 import org.ssiu.ucp.flink.core.api.FlinkStreamReader;
@@ -54,12 +53,10 @@ public class Fake extends FlinkSingleWriter implements FlinkBatchReader, FlinkSt
     }
 
     @Override
-    protected void singleWrite(Table input, FlinkRuntimeEnv env, Config config) throws Exception {
-        final ResolvedSchema resolvedSchema = input.getResolvedSchema();
+    protected TableResult singleWrite(Table input, FlinkRuntimeEnv env, Config config) throws Exception {
         final TableDescriptor sink = TableDescriptor.forConnector(SINK_CONNECTOR)
-                //.schema(Schema.newBuilder().fromResolvedSchema(resolvedSchema).build())
                 .build();
-        input.executeInsert(sink);
+        return input.executeInsert(sink);
     }
 
 

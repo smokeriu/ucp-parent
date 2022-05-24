@@ -19,15 +19,17 @@
 package org.ssiu.ucp.flink.core.workflow;
 
 import org.apache.flink.table.api.Table;
+import org.apache.flink.table.api.TableResult;
 import org.ssiu.ucp.common.api.Element;
 import org.ssiu.ucp.core.service.TableProvider;
 import org.ssiu.ucp.core.workflow.UniversalFlow;
 import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
+import org.ssiu.ucp.flink.core.service.FlinkQueryHandle;
 
 import java.util.List;
 
-public class FlinkFlow extends UniversalFlow<FlinkRuntimeEnv, Table> {
-    public FlinkFlow(List<Element> elementList, TableProvider<FlinkRuntimeEnv, Table> tableProvider, FlinkRuntimeEnv env) {
-        super(elementList, tableProvider, env);
+public class FlinkFlow extends UniversalFlow<FlinkRuntimeEnv, TableResult, Table> {
+    public FlinkFlow(List<Element> elementList, TableProvider<FlinkRuntimeEnv, Table> tableProvider, FlinkQueryHandle flinkQueryHandle, FlinkRuntimeEnv env) {
+        super(elementList, tableProvider, flinkQueryHandle, env);
     }
 }

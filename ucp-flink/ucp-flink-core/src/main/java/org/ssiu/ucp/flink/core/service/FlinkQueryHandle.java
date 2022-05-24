@@ -16,16 +16,21 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.flink.core.api;
+package org.ssiu.ucp.flink.core.service;
 
-import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
-import org.ssiu.ucp.core.api.StreamWriter;
+import org.ssiu.ucp.core.service.StreamQueryHandle;
 import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
 
-/**
- * If want use DataStream. User can convert from Table
- */
-interface FlinkStreamWriter extends StreamWriter<FlinkRuntimeEnv, TableResult, Table> {
+public class FlinkQueryHandle implements StreamQueryHandle<FlinkRuntimeEnv, TableResult> {
 
+    @Override
+    public void cacheQuery(FlinkRuntimeEnv env, TableResult query) {
+        // in flink 1.14. avoid cacheQuery
+    }
+
+    @Override
+    public void execute(FlinkRuntimeEnv env) throws Exception {
+        env.getStreamEnv().execute();
+    }
 }

@@ -28,14 +28,16 @@ import java.util.Map;
  *
  * @param <E>  Runtime Env
  * @param <IN> IN data format
+ * @param <Q>  A stream query.
  */
-public interface StreamWriter<E extends RuntimeEnv, IN> extends Plugin<E> {
+public interface StreamWriter<E extends RuntimeEnv, Q, IN> extends Plugin<E> {
     /**
      * write data to external storages.
      *
      * @param inputs data. key is data name in engine
      * @param env    runtime context
      * @param config element config
+     * @return a stream query.
      */
-    void streamWrite(Map<String, IN> inputs, E env, Config config) throws Exception;
+    Q streamWrite(Map<String, IN> inputs, E env, Config config) throws Exception;
 }

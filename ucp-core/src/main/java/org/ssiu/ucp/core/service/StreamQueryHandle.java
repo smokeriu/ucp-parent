@@ -16,16 +16,27 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.flink.core.api;
+package org.ssiu.ucp.core.service;
 
-import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.TableResult;
-import org.ssiu.ucp.core.api.StreamWriter;
-import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
+import org.ssiu.ucp.core.env.RuntimeEnv;
 
 /**
- * If want use DataStream. User can convert from Table
+ * A interface to process stream query
+ *
+ * @param <E> runtime env
+ * @param <Q> stream query type
  */
-interface FlinkStreamWriter extends StreamWriter<FlinkRuntimeEnv, TableResult, Table> {
+public interface StreamQueryHandle<E extends RuntimeEnv, Q> {
 
+    /**
+     * Add Query to cache.
+     */
+    void cacheQuery(E env, Q query);
+
+    /**
+     * Execute all queries
+     *
+     * @param env runtime env
+     */
+    void execute(E env) throws Exception;
 }

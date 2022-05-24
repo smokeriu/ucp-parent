@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-package org.ssiu.ucp.flink.core.api;
+package org.ssiu.ucp.spark.core.service
 
-import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.TableResult;
-import org.ssiu.ucp.core.api.StreamWriter;
-import org.ssiu.ucp.flink.core.env.FlinkRuntimeEnv;
+import org.ssiu.ucp.common.api.Element
+import org.ssiu.ucp.core.workflow.UniversalFlow
+import org.ssiu.ucp.spark.core.env.SparkRuntimeEnv
 
-/**
- * If want use DataStream. User can convert from Table
- */
-interface FlinkStreamWriter extends StreamWriter<FlinkRuntimeEnv, TableResult, Table> {
-
-}
+case class SparkWorkflow(elementList: java.util.List[Element],
+                         tableProvider: SparkTableProvider,
+                         sparkQueryHandle: SparkQueryHandle,
+                         sparkRuntimeEnv: SparkRuntimeEnv)
+  extends UniversalFlow(elementList, tableProvider, sparkQueryHandle, sparkRuntimeEnv)
